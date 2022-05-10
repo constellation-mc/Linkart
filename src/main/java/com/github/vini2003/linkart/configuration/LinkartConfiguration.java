@@ -11,7 +11,7 @@ public class LinkartConfiguration implements ConfigData {
    @Tooltip
    public boolean enableLinker = true;
    @Tooltip
-   public boolean enableChain = true;
+   public boolean enableChain = false;
    @Tooltip
    public int pathfindingDistance = 8;
    @Tooltip
