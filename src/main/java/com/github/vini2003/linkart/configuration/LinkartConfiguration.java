@@ -17,7 +17,7 @@ public class LinkartConfiguration implements ConfigData {
    @Tooltip
    public float velocityMultiplier = 0.5F;
    @Tooltip
-   public int collisionDepth = 16;
+   public int collisionDepth = 8;
 
    public boolean isLinkerEnabled() {
       return this.enableLinker;
