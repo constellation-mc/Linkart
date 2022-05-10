@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "linkart",
+  "version": "unspecified",
+  "name": "Linkart",
+  "description": "Link together minecarts with ease!",
+  "authors": [
+    "vini2003",
+    "Martmists"
+  ],
+  "contact": {
+    "sources": "https://github.com/vini2003/linkart"
+  },
+  "license": "GPLv3",
+  "icon": "assets/linkart/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.github.vini2003.linkart.Linkart"
+    ],
+    "modmenu": [
+      "com.github.vini2003.linkart.integration.LinkartModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "linkart.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

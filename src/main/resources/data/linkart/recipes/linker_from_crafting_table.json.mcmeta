@@ -1,0 +1,7 @@
+{
+  "when": [
+    {
+      "libcd:item_exists": "linkart:linker"
+    }
+  ]
+}

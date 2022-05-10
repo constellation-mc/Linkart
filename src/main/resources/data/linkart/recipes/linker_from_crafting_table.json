@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " 12",
+    "  1",
+    " 1 "
+  ],
+  "key": {
+    "1": {
+      "item": "minecraft:iron_ingot"
+    },
+    "2": {
+      "item": "minecraft:red_dye"
+    }
+  },
+  "result": {
+    "item": "linkart:linker",
+    "count": 1
+  }
+}
