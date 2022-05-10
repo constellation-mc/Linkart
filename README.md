@@ -1,9 +1,7 @@
-# Fabric Example Mod
+# Linkfart
 
-## Setup
+This is version 2.0.3 which never got pushed for some reason.
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+This "source code" was generated via tiny remapper and Quiltflower, and "fixed" by me
 
-## License
-
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+## 
