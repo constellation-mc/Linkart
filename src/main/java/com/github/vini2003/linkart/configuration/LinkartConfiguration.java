@@ -9,10 +9,6 @@ import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry.Gui.Tooltip;
 )
 public class LinkartConfiguration implements ConfigData {
    @Tooltip
-   public boolean enableLinker = false;
-   @Tooltip
-   public boolean enableChain = true;
-   @Tooltip
    public int pathfindingDistance = 8;
    @Tooltip
    public float velocityMultiplier = 0.5F;
