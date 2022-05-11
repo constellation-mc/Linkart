@@ -119,11 +119,28 @@ public abstract class PlayerEntityMixin {
                         if (!optionalSlot.isPresent()) {
                            sendToClient(playerEntity, new TranslatableText("text.linkart.message.cart_link_failure_chain").formatted(Formatting.RED));
                            cancelCallback(callbackInformationReturnable, playerEntity);
-         
-                           return;
+                        }
+                        else {accessorB.setNext((AbstractMinecartEntity)entityA);
+                           ((AbstractMinecartEntityAccessor)accessorB.getNext()).setPrevious(entityB);
+                           ClientSidePacketRegistry.INSTANCE.sendToServer(LinkartNetworks.LINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
+                           sendToClient(
+                              playerEntity,
+                              new TranslatableText(
+                                 "text.linkart.message.cart_link_success",
+                                 new Object[]{
+                                    TextUtils.literal((int)x1, Formatting.GREEN),
+                                    TextUtils.literal((int)y1, Formatting.GREEN),
+                                    TextUtils.literal((int)z1, Formatting.GREEN),
+                                    TextUtils.literal((int)x2, Formatting.GREEN),
+                                    TextUtils.literal((int)y2, Formatting.GREEN),
+                                    TextUtils.literal((int)z2, Formatting.GREEN)
+                                 }
+                              )
+                           );
+                           cancelCallback(callbackInformationReturnable, playerEntity);
                         }
                      }
-
+                     else {
                      accessorB.setNext((AbstractMinecartEntity)entityA);
                      ((AbstractMinecartEntityAccessor)accessorB.getNext()).setPrevious(entityB);
                      ClientSidePacketRegistry.INSTANCE.sendToServer(LinkartNetworks.LINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
@@ -143,6 +160,7 @@ public abstract class PlayerEntityMixin {
                      );
                      cancelCallback(callbackInformationReturnable, playerEntity);
                   }
+               }
                } else {
                   sendToClient(playerEntity, new TranslatableText("text.linkart.message.cart_link_failure_recursion").formatted(Formatting.RED));
                   cancelCallback(callbackInformationReturnable, playerEntity);
