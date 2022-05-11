@@ -87,7 +87,7 @@ public class LinkartNetworks {
                               playerEntity.getX(),
                               playerEntity.getY(),
                               playerEntity.getZ(),
-                              new ItemStack(LinkartItems.CHAIN_ITEM)
+                              new ItemStack(Items.CHAIN)
                            );
                         }
             
