@@ -7,7 +7,7 @@ import com.github.vini2003.linkart.utility.CollisionUtils;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -37,9 +37,9 @@ public abstract class EntityMixin {
 
    @Inject(
       at = {@At("RETURN")},
-      method = {"toTag(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;"}
+      method = {"writeNbt(Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/nbt/NbtCompound;"}
    )
-   void onToTag(CompoundTag tag, CallbackInfoReturnable<CompoundTag> callbackInformationReturnable) {
+   void onToTag(NbtCompound tag, CallbackInfoReturnable<NbtCompound> callbackInformationReturnable) {
       if ((Object) this instanceof AbstractMinecartEntity) {
          AbstractMinecartEntity entity = (AbstractMinecartEntity) (Object) this;
          AbstractMinecartEntityAccessor accessor = (AbstractMinecartEntityAccessor)entity;
@@ -56,9 +56,9 @@ public abstract class EntityMixin {
 
    @Inject(
       at = {@At("RETURN")},
-      method = {"fromTag(Lnet/minecraft/nbt/CompoundTag;)V"}
+      method = {"readNbt(Lnet/minecraft/nbt/NbtCompound;)V"}
    )
-   void onFromTag(CompoundTag tag, CallbackInfo callbackInformation) {
+   void onFromTag(NbtCompound tag, CallbackInfo callbackInformation) {
       if ((Object) this instanceof AbstractMinecartEntity) {
          AbstractMinecartEntity entity = (AbstractMinecartEntity) (Object)this;
          AbstractMinecartEntityAccessor accessor = (AbstractMinecartEntityAccessor)entity;
