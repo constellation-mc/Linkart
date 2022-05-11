@@ -1,17 +1,18 @@
 {
   "schemaVersion": 1,
   "id": "linkart",
-  "version": "unspecified",
+  "version": "${version}",
   "name": "Linkart",
   "description": "Link together minecarts with ease!",
   "authors": [
     "vini2003",
-    "Martmists"
+    "Martmists",
+    "melontini"
   ],
   "contact": {
-    "sources": "https://github.com/vini2003/linkart"
+    "sources": "https://github.com/melontini/Linkart"
   },
-  "license": "GPLv3",
+  "license": "MIT",
   "icon": "assets/linkart/icon.png",
   "environment": "*",
   "entrypoints": {
@@ -29,8 +30,5 @@
     "fabricloader": ">=0.7.4",
     "fabric": "*",
     "minecraft": "1.16.x"
-  },
-  "suggests": {
-    "flamingo": "*"
   }
 }
