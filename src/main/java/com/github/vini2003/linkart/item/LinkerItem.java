@@ -15,7 +15,7 @@ public class LinkerItem extends Item {
       super(settings);
    }
 
-   public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
+   /*public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
       super.appendTooltip(stack, world, tooltip, context);
       if (!Screen.hasShiftDown()) {
          tooltip.add(new TranslatableText("text.linkart.item.show_more").formatted(new Formatting[]{Formatting.ITALIC, Formatting.GREEN}));
@@ -29,5 +29,5 @@ public class LinkerItem extends Item {
          );
       }
 
-   }
+   }*/
 }

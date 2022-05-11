@@ -9,7 +9,7 @@ import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry.Gui.Tooltip;
 )
 public class LinkartConfiguration implements ConfigData {
    @Tooltip
-   public boolean enableLinker = true;
+   public boolean enableLinker = false;
    @Tooltip
    public boolean enableChain = true;
    @Tooltip
@@ -20,11 +20,11 @@ public class LinkartConfiguration implements ConfigData {
    public int collisionDepth = 8;
 
    public boolean isLinkerEnabled() {
-      return this.enableLinker;
+      return false;
    }
 
    public boolean isChainEnabled() {
-      return this.enableChain;
+      return true;
    }
 
    public int getPathfindingDistance() {
