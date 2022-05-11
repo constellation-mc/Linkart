@@ -30,7 +30,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin({PlayerEntity.class})
 public abstract class PlayerEntityMixin {
-   public boolean ChainConfig = false;
    @Final
 	public PlayerScreenHandler playerScreenHandler;
    
@@ -114,7 +113,7 @@ public abstract class PlayerEntityMixin {
                      );
                      cancelCallback(callbackInformationReturnable, playerEntity);
                   } else {
-                     if (ChainConfig = true /*LinkartConfigurations.INSTANCE.getConfig().isChainEnabled()*/) {
+                     if (((LinkartConfiguration)LinkartConfigurations.INSTANCE.getConfig()).isChainEnabled()) {
                         Optional<Slot> optionalSlot = playerScreenHandler.slots.stream().filter(slot -> slot.getStack().getItem() == Items.CHAIN).findFirst();
          
                         if (!optionalSlot.isPresent()) {
