@@ -4,11 +4,17 @@ import com.github.vini2003.linkart.accessor.AbstractMinecartEntityAccessor;
 import com.github.vini2003.linkart.utility.CollisionUtils;
 import com.github.vini2003.linkart.utility.RailUtils;
 import java.util.UUID;
+
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Pair;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Position;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.mutable.MutableDouble;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,6 +32,12 @@ public abstract class AbstractMinecartEntityMixin implements AbstractMinecartEnt
    @Unique
    private UUID previousUuid;
 
+   @Unique
+   private static final Vec3d POS = new Vec3d(0.0, 0.0, 0.0);
+   @Override
+   public boolean isInRange(Position pos, double radius) {
+      return this.squaredDistanceTo(pos.getX(), pos.getY(), pos.getZ()) < radius * radius;
+   }
    @Override
    public AbstractMinecartEntity getPrevious() {
       if (this.previous == null && this.getPreviousUuid() != null && !((AbstractMinecartEntity)(Object)this).world.isClient) {
@@ -83,12 +95,20 @@ public abstract class AbstractMinecartEntityMixin implements AbstractMinecartEnt
    void onTickCommon(CallbackInfo callbackInformation) {
       World mixedWorld = ((AbstractMinecartEntity)(Object)this).world;
       AbstractMinecartEntity next = (AbstractMinecartEntity)(Object)this;
+
       AbstractMinecartEntityAccessor accessor = (AbstractMinecartEntityAccessor)next;
       if (!mixedWorld.isClient && accessor.getPrevious() != null) {
          AbstractMinecartEntity previous = accessor.getPrevious();
+         Pair<BlockPos, MutableDouble> nextRail = RailUtils.getNextRail(next, previous);
          Vec3d nextVelocity = RailUtils.getNextVelocity(next, previous);
          if (nextVelocity != null) {
-            next.setVelocity(nextVelocity);
+            if (nextRail == null) {
+               next.setVelocity(0, 0, 0);
+            }
+            else if (previous.getVelocity().getX() == 0 && previous.getVelocity().getZ() == 0) {
+               next.setVelocity(0, 0, 0);
+            }
+            else {next.setVelocity(nextVelocity);}
          }
       }
 

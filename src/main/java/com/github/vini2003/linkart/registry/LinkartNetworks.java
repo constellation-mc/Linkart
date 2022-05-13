@@ -47,7 +47,7 @@ public class LinkartNetworks {
                                        .formatted(Formatting.RED),
                                  true);
                            return;
-                        } else {
+                        } else if (!player.isCreative()) {
                             hand.decrement(1);;
                         }
 
@@ -82,15 +82,12 @@ public class LinkartNetworks {
                                      assert accessorB != null;
                                      accessorB.setPrevious(null);
                                     PlayerEntity playerEntity = context.getPlayer();
-                                    if (((LinkartConfiguration) LinkartConfigurations.INSTANCE.getConfig())
-                                          .isChainEnabled()) {
-                                       ItemScatterer.spawn(
+                                    ItemScatterer.spawn(
                                              playerEntity.world,
                                              playerEntity.getX(),
                                              playerEntity.getY(),
                                              playerEntity.getZ(),
                                              new ItemStack(Items.CHAIN));
-                                    }
 
                                  });
                   });

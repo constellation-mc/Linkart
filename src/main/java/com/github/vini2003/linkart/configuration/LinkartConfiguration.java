@@ -11,7 +11,7 @@ public class LinkartConfiguration implements ConfigData {
    @Tooltip
    public int pathfindingDistance = 8;
    @Tooltip
-   public float velocityMultiplier = 0.5F;
+   public float velocityMultiplier = 1.0F;
    @Tooltip
    public int collisionDepth = 8;
 
