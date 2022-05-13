@@ -21,7 +21,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Hand;
 
 @Mixin({ PlayerEntity.class })
 public class PlayerEntityMixin {
@@ -95,12 +97,11 @@ public class PlayerEntityMixin {
                         if (entityA.getPos().distanceTo(entityB.getPos()) > (double) pD) {
                             sendToClient(
                                     playerEntity,
-                                    new TranslatableText("text.linkart.message.cart_link_failure_chain",
+                                    new TranslatableText("text.linkart.message.cart_link_failure_distance",
                                             TextUtils.literal(pD))
                                             .formatted(Formatting.RED));
                             cancelCallback(callbackInformationReturnable, playerEntity);
                         } else {
-                            //Optional<Slot> optionalSlot = playerScreenHandler.slots.stream().filter(slot -> slot.getStack().getItem() == Items.CHAIN).findFirst();
                             if (heldItem != Items.CHAIN) {
                                sendToClient(playerEntity, new TranslatableText("text.linkart.message.cart_link_failure_chain").formatted(Formatting.RED));
                             }

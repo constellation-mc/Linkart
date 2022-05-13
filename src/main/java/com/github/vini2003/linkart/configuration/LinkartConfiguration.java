@@ -15,14 +15,6 @@ public class LinkartConfiguration implements ConfigData {
    @Tooltip
    public int collisionDepth = 8;
 
-   public boolean isLinkerEnabled() {
-      return false;
-   }
-
-   public boolean isChainEnabled() {
-      return true;
-   }
-
    public int getPathfindingDistance() {
       return this.pathfindingDistance;
    }

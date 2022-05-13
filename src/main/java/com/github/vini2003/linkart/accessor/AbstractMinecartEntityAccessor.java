@@ -1,11 +1,10 @@
 package com.github.vini2003.linkart.accessor;
 
 import java.util.UUID;
+
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.util.math.Position;
 
 public interface AbstractMinecartEntityAccessor {
-   boolean isInRange(Position pos, double radius);
 
    AbstractMinecartEntity getPrevious();
 

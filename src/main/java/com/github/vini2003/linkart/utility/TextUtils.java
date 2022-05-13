@@ -1,6 +1,7 @@
 package com.github.vini2003.linkart.utility;
 
 import java.io.Serializable;
+
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Formatting;
 

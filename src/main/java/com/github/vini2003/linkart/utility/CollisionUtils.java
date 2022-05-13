@@ -3,6 +3,7 @@ package com.github.vini2003.linkart.utility;
 import com.github.vini2003.linkart.accessor.AbstractMinecartEntityAccessor;
 import com.github.vini2003.linkart.configuration.LinkartConfiguration;
 import com.github.vini2003.linkart.registry.LinkartConfigurations;
+
 import net.minecraft.entity.Entity;
 
 public class CollisionUtils {

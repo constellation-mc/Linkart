@@ -1,13 +1,17 @@
 package com.github.vini2003.linkart.utility;
 
-import com.github.vini2003.linkart.configuration.LinkartConfiguration;
-import com.github.vini2003.linkart.registry.LinkartConfigurations;
-import com.github.vini2003.linkart.registry.LinkartDistanceRegistry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.github.vini2003.linkart.configuration.LinkartConfiguration;
+import com.github.vini2003.linkart.registry.LinkartConfigurations;
+import com.github.vini2003.linkart.registry.LinkartDistanceRegistry;
+
+import org.apache.commons.lang3.mutable.MutableDouble;
+
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.enums.RailShape;
@@ -16,7 +20,6 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.mutable.MutableDouble;
 
 public class RailUtils {
    public static Pair<BlockPos, MutableDouble> getNextRail(AbstractMinecartEntity next, AbstractMinecartEntity previous) {

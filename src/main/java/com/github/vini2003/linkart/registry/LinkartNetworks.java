@@ -1,9 +1,10 @@
 package com.github.vini2003.linkart.registry;
 
-import com.github.vini2003.linkart.accessor.AbstractMinecartEntityAccessor;
-import com.github.vini2003.linkart.configuration.LinkartConfiguration;
-import io.netty.buffer.Unpooled;
 import java.util.UUID;
+
+import com.github.vini2003.linkart.accessor.AbstractMinecartEntityAccessor;
+
+import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,7 +15,9 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.*;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.ItemScatterer;
 
 public class LinkartNetworks {
 

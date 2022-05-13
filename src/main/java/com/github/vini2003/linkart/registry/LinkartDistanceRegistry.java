@@ -2,6 +2,7 @@ package com.github.vini2003.linkart.registry;
 
 import java.util.Collection;
 import java.util.HashMap;
+
 import net.minecraft.entity.EntityType;
 
 public class LinkartDistanceRegistry {

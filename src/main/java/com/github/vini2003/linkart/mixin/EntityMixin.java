@@ -4,6 +4,14 @@ import java.util.List;
 
 import com.github.vini2003.linkart.accessor.AbstractMinecartEntityAccessor;
 import com.github.vini2003.linkart.utility.CollisionUtils;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
@@ -11,12 +19,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin({Entity.class})
 public abstract class EntityMixin {
@@ -25,15 +27,6 @@ public abstract class EntityMixin {
 
 	@Shadow
 	public abstract Box getBoundingBox();
-
-	@Shadow
-	public abstract double getX();
-
-	@Shadow
-	public abstract double getY();
-
-	@Shadow
-	public abstract double getZ();
 
    @Inject(
       at = {@At("RETURN")},

@@ -1,10 +1,12 @@
 package com.github.vini2003.linkart.registry;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
