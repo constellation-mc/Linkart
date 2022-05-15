@@ -101,6 +101,9 @@ public abstract class AbstractMinecartEntityMixin implements AbstractMinecartEnt
             else if (previous.getVelocity().getX() == 0 && previous.getVelocity().getZ() == 0) {
                next.setVelocity(0, 0, 0);
             }
+            //else if (previous.getPos().distanceTo(next.getPos()) > 1 && nextRail != null && (previous.getVelocity().getX() != 0 || previous.getVelocity().getZ() != 0)) {
+            //  next.setVelocity(nextVelocity.getX() + 1, nextVelocity.getY() + 1, nextVelocity.getZ() + 1);
+            //}
             else {next.setVelocity(nextVelocity);}
          }
       }

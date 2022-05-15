@@ -7,6 +7,9 @@ import java.util.Set;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
+import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -26,7 +29,9 @@ public class LinkartLinkerRegistry {
       INSTANCE.register(EntityType.TNT_MINECART, Items.CHAIN);
       INSTANCE.register(EntityType.SPAWNER_MINECART, Items.CHAIN);
       INSTANCE.register(EntityType.COMMAND_BLOCK_MINECART, Items.CHAIN);
-
+      if (FabricLoader.getInstance().isModLoaded("sandwichable")) {
+         INSTANCE.register(EntitiesRegistry.SANDWICH_TABLE_MINECART, Items.CHAIN);
+      }
    }
 
    public Collection<EntityType<?>> getKeys() {

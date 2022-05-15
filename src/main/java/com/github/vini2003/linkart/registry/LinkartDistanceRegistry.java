@@ -3,7 +3,10 @@ package com.github.vini2003.linkart.registry;
 import java.util.Collection;
 import java.util.HashMap;
 
+import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.Items;
 
 public class LinkartDistanceRegistry {
    public static final LinkartDistanceRegistry INSTANCE = new LinkartDistanceRegistry();
@@ -43,5 +46,8 @@ public class LinkartDistanceRegistry {
       INSTANCE.register(EntityType.TNT_MINECART, 1.0);
       INSTANCE.register(EntityType.SPAWNER_MINECART, 1.0);
       INSTANCE.register(EntityType.COMMAND_BLOCK_MINECART, 1.0);
+      if (FabricLoader.getInstance().isModLoaded("sandwichable")) {
+         INSTANCE.register(EntitiesRegistry.SANDWICH_TABLE_MINECART, 1.0);
+      }
    }
 }
