@@ -1,20 +1,20 @@
 package com.github.vini2003.linkart.mixin;
 
-import java.util.UUID;
-
 import com.github.vini2003.linkart.accessor.AbstractMinecartEntityAccessor;
-import com.github.vini2003.linkart.configuration.LinkartConfiguration;
 import com.github.vini2003.linkart.registry.LinkartConfigurations;
-import com.github.vini2003.linkart.registry.LinkartNetworks;
 import com.github.vini2003.linkart.utility.CollisionUtils;
 import com.github.vini2003.linkart.utility.RailUtils;
-
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.block.AbstractRailBlock;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.Pair;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -22,13 +22,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Pair;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import java.util.UUID;
 
 @Mixin({AbstractMinecartEntity.class})
 public abstract class AbstractMinecartEntityMixin implements AbstractMinecartEntityAccessor {

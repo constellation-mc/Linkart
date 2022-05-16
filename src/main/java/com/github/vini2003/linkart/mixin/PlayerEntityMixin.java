@@ -6,12 +6,6 @@ import com.github.vini2003.linkart.registry.LinkartConfigurations;
 import com.github.vini2003.linkart.registry.LinkartLinkerRegistry;
 import com.github.vini2003.linkart.registry.LinkartNetworks;
 import com.github.vini2003.linkart.utility.TextUtils;
-
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,12 +18,16 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin({ PlayerEntity.class })
+@Mixin({PlayerEntity.class})
 public class PlayerEntityMixin {
 
-    @Inject(at = { @At("HEAD") }, method = {
-            "interact(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;" }, cancellable = true)
+    @Inject(at = {@At("HEAD")}, method = {
+            "interact(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;"}, cancellable = true)
     void onInteract(Entity entityA, Hand hand, CallbackInfoReturnable<ActionResult> callbackInformationReturnable) {
         if (entityA instanceof AbstractMinecartEntity && hand == Hand.MAIN_HAND && entityA.world.isClient) {
             PlayerEntity playerEntity = (PlayerEntity) (Object) this;
@@ -51,7 +49,7 @@ public class PlayerEntityMixin {
                     cancelCallback(callbackInformationReturnable);
                 } else {
                     AbstractMinecartEntityAccessor accessorA = (AbstractMinecartEntityAccessor) entityA;
-                    AbstractMinecartEntity entityB = (AbstractMinecartEntity) Linkart.SELECTED_ENTITIES
+                    AbstractMinecartEntity entityB = Linkart.SELECTED_ENTITIES
                             .get(playerEntity);
                     AbstractMinecartEntityAccessor accessorB = (AbstractMinecartEntityAccessor) entityB;
                     double x2 = entityB.getX();
@@ -103,50 +101,50 @@ public class PlayerEntityMixin {
                             cancelCallback(callbackInformationReturnable, playerEntity);
                         } else {
                             if (heldItem != Items.CHAIN) {
-                               sendToClient(playerEntity, new TranslatableText("text.linkart.message.cart_link_failure_chain").formatted(Formatting.RED));
-                            }
-                            else {accessorB.setNext((AbstractMinecartEntity)entityA);
-                               ((AbstractMinecartEntityAccessor)accessorB.getNext()).setPrevious(entityB);
-                               ClientSidePacketRegistry.INSTANCE.sendToServer(LinkartNetworks.LINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
-                               sendToClient(
-                                  playerEntity,
-                                  new TranslatableText(
-                                     "text.linkart.message.cart_link_success",
-                                          TextUtils.literal((int)x1, Formatting.GREEN),
-                                          TextUtils.literal((int)y1, Formatting.GREEN),
-                                          TextUtils.literal((int)z1, Formatting.GREEN),
-                                          TextUtils.literal((int)x2, Formatting.GREEN),
-                                          TextUtils.literal((int)y2, Formatting.GREEN),
-                                          TextUtils.literal((int)z2, Formatting.GREEN))
-                               );
+                                sendToClient(playerEntity, new TranslatableText("text.linkart.message.cart_link_failure_chain").formatted(Formatting.RED));
+                            } else {
+                                accessorB.setNext((AbstractMinecartEntity) entityA);
+                                ((AbstractMinecartEntityAccessor) accessorB.getNext()).setPrevious(entityB);
+                                ClientSidePacketRegistry.INSTANCE.sendToServer(LinkartNetworks.LINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
+                                sendToClient(
+                                        playerEntity,
+                                        new TranslatableText(
+                                                "text.linkart.message.cart_link_success",
+                                                TextUtils.literal((int) x1, Formatting.GREEN),
+                                                TextUtils.literal((int) y1, Formatting.GREEN),
+                                                TextUtils.literal((int) z1, Formatting.GREEN),
+                                                TextUtils.literal((int) x2, Formatting.GREEN),
+                                                TextUtils.literal((int) y2, Formatting.GREEN),
+                                                TextUtils.literal((int) z2, Formatting.GREEN))
+                                );
                             }
                             cancelCallback(callbackInformationReturnable, playerEntity);
                         }
-                    }
-                    else {
+                    } else {
                         sendToClient(playerEntity, new TranslatableText("text.linkart.message.cart_link_failure_recursion").formatted(Formatting.RED));
                         cancelCallback(callbackInformationReturnable, playerEntity);
-                     }
+                    }
                 }
-                
+
             }
         }
     }
+
     private static void cancelCallback(CallbackInfoReturnable<ActionResult> callbackInformationReturnable) {
         callbackInformationReturnable.setReturnValue(ActionResult.FAIL);
         callbackInformationReturnable.cancel();
-     }
-  
-     private static void cancelCallback(CallbackInfoReturnable<ActionResult> callbackInformationReturnable, PlayerEntity playerEntity) {
+    }
+
+    private static void cancelCallback(CallbackInfoReturnable<ActionResult> callbackInformationReturnable, PlayerEntity playerEntity) {
         callbackInformationReturnable.setReturnValue(ActionResult.FAIL);
         callbackInformationReturnable.cancel();
         Linkart.SELECTED_ENTITIES.put(playerEntity, null);
-     }
-  
-     private static void sendToClient(PlayerEntity playerEntity, Text text) {
+    }
+
+    private static void sendToClient(PlayerEntity playerEntity, Text text) {
         if (playerEntity.world.isClient) {
-           playerEntity.sendMessage(text, true);
+            playerEntity.sendMessage(text, true);
         }
-  
-     }
+
+    }
 }

@@ -1,26 +1,26 @@
 package com.github.vini2003.linkart.accessor;
 
-import java.util.UUID;
-
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+
+import java.util.UUID;
 
 public interface AbstractMinecartEntityAccessor {
 
-   AbstractMinecartEntity getPrevious();
+    AbstractMinecartEntity getPrevious();
 
-   void setPrevious(AbstractMinecartEntity var1);
+    void setPrevious(AbstractMinecartEntity var1);
 
-   AbstractMinecartEntity getNext();
+    AbstractMinecartEntity getNext();
 
-   void setNext(AbstractMinecartEntity var1);
+    void setNext(AbstractMinecartEntity var1);
 
-   UUID getPreviousUuid();
+    UUID getPreviousUuid();
 
-   void setPreviousUuid(UUID var1);
+    void setPreviousUuid(UUID var1);
 
-   UUID getNextUuid();
+    UUID getNextUuid();
 
-   void setNextUuid(UUID var1);
+    void setNextUuid(UUID var1);
 
-   double squaredDistanceTo(double x, double y, double z);
+    double squaredDistanceTo(double x, double y, double z);
 }
