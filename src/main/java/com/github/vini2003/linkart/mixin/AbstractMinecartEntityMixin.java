@@ -104,7 +104,7 @@ public abstract class AbstractMinecartEntityMixin implements AbstractMinecartEnt
                 } else if (!(next.world.getBlockState(next.getBlockPos()).getBlock() instanceof AbstractRailBlock)) {
                     next.setVelocity(0, 0, 0);
                 } else {
-                    next.setVelocity(nextVelocity.getX(), nextVelocity.getY() + 0.1, nextVelocity.getZ());
+                    next.setVelocity(nextVelocity);
                 }
             }
         }
