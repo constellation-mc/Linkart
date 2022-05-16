@@ -1,9 +1,10 @@
 package com.github.vini2003.linkart.registry;
 
 import com.github.vini2003.linkart.configuration.LinkartConfiguration;
-import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
-import me.sargunvohra.mcmods.autoconfig1u.ConfigHolder;
-import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer;
+
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigHolder;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 
 public class LinkartConfigurations {
     //TODO migrate to newer versions of auto & cloth config

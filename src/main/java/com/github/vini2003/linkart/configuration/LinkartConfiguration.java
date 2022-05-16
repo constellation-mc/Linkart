@@ -1,18 +1,18 @@
 package com.github.vini2003.linkart.configuration;
 
-import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
-import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
-import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry.Gui.Tooltip;
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
 @Config(
         name = "linkart"
 )
 public class LinkartConfiguration implements ConfigData {
-    @Tooltip
+    @ConfigEntry.Gui.Tooltip
     public int pathfindingDistance = 8;
-    @Tooltip
+    @ConfigEntry.Gui.Tooltip
     public float velocityMultiplier = 1.0F;
-    @Tooltip
+    @ConfigEntry.Gui.Tooltip
     public int collisionDepth = 8;
 
     public int getPathfindingDistance() {

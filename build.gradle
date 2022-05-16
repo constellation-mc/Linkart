@@ -17,17 +17,18 @@ repositories {
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html
     // for more information about repositories.
     maven {
-        name = "modmuss50"
+        name = "Mod Menu"
         url = "https://maven.terraformersmc.com/releases"
     }
 
     // Cotton
     maven {
-        name = "Cotton"
+        name = "Cloth Config Api"
         url = "https://maven.shedaniel.me/"
     }
     mavenCentral()
     maven {
+        name = "Cursemaven"
         url "https://cursemaven.com"
         content {
             includeGroup "curse.maven"
@@ -43,8 +44,10 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    // AutoConfig
-    modImplementation group: "me.sargunvohra.mcmods", name: 'autoconfig1u', version: '3.3.1'
+    //Cloth Config
+    modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 
     // ModMenu
     modImplementation "com.terraformersmc:modmenu:${modmenu_version}"
