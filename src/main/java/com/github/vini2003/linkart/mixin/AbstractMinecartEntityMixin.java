@@ -101,12 +101,10 @@ public abstract class AbstractMinecartEntityMixin implements AbstractMinecartEnt
             if (nextVelocity != null) {
                 if ((next.getPos().distanceTo(previous.getPos()) > LinkartConfigurations.INSTANCE.getConfig().getPathfindingDistance()) && getPrevious() != null) {
                     unlinkCarts();
-                } else if (previous.getVelocity().getY() == 0 && previous.getVelocity().getX() == 0 && previous.getVelocity().getZ() == 0) {
-                    next.setVelocity(0, 0, 0);
                 } else if (!(next.world.getBlockState(next.getBlockPos()).getBlock() instanceof AbstractRailBlock)) {
                     next.setVelocity(0, 0, 0);
                 } else {
-                    next.setVelocity(nextVelocity);
+                    next.setVelocity(nextVelocity.getX(), nextVelocity.getY() + 0.1, nextVelocity.getZ());
                 }
             }
         }
@@ -127,12 +125,14 @@ public abstract class AbstractMinecartEntityMixin implements AbstractMinecartEnt
         ((AbstractMinecartEntityAccessor) previous).setNext(null);
         assert entityB != null;
         ((AbstractMinecartEntityAccessor) next).setPrevious(null);
-        ItemScatterer.spawn(
-                entityA.world,
-                entityA.getX(),
-                entityA.getY(),
-                entityA.getZ(),
-                new ItemStack(Items.CHAIN));
+        if (((AbstractMinecartEntityAccessor) next).getPrevious() == null) {
+            ItemScatterer.spawn(
+                    entityA.world,
+                    entityA.getX(),
+                    entityA.getY(),
+                    entityA.getZ(),
+                    new ItemStack(Items.CHAIN));
+        }
     }
 
     @Inject(
