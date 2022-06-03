@@ -6,6 +6,8 @@ import com.github.vini2003.linkart.registry.LinkartConfigurations;
 import com.github.vini2003.linkart.registry.LinkartLinkerRegistry;
 import com.github.vini2003.linkart.registry.LinkartNetworks;
 import com.github.vini2003.linkart.utility.TextUtils;
+
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -61,13 +63,15 @@ public class PlayerEntityMixin {
                         if (boolA) {
                             accessorA.setNext(null);
                             accessorB.setPrevious(null);
-                            ClientSidePacketRegistry.INSTANCE.sendToServer(LinkartNetworks.UNLINK_PACKET,
-                                    LinkartNetworks.createPacket(entityA, entityB));
+                            ClientPlayNetworking.send(LinkartNetworks.UNLINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
+                            /*ClientSidePacketRegistry.INSTANCE.sendToServer(LinkartNetworks.UNLINK_PACKET,
+                                    LinkartNetworks.createPacket(entityA, entityB));*/
                         } else if (boolB) {
                             accessorB.setNext(null);
                             accessorA.setPrevious(null);
-                            ClientSidePacketRegistry.INSTANCE.sendToServer(LinkartNetworks.UNLINK_PACKET,
-                                    LinkartNetworks.createPacket(entityB, entityA));
+                            ClientPlayNetworking.send(LinkartNetworks.LINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
+                            /*ClientSidePacketRegistry.INSTANCE.sendToServer(LinkartNetworks.UNLINK_PACKET,
+                                    LinkartNetworks.createPacket(entityB, entityA));*/
                         }
                         if (boolA || boolB) {
                             sendToClient(
@@ -105,7 +109,8 @@ public class PlayerEntityMixin {
                             } else {
                                 accessorB.setNext((AbstractMinecartEntity) entityA);
                                 ((AbstractMinecartEntityAccessor) accessorB.getNext()).setPrevious(entityB);
-                                ClientSidePacketRegistry.INSTANCE.sendToServer(LinkartNetworks.LINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
+                                ClientPlayNetworking.send(LinkartNetworks.LINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
+                                //ClientSidePacketRegistry.INSTANCE.sendToServer(LinkartNetworks.LINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
                                 sendToClient(
                                         playerEntity,
                                         new TranslatableText(

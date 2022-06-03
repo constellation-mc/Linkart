@@ -2,14 +2,12 @@ package com.github.vini2003.linkart.registry;
 
 import com.github.vini2003.linkart.accessor.AbstractMinecartEntityAccessor;
 import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
@@ -31,7 +29,58 @@ public class LinkartNetworks {
     }
 
     public static void initialize() {
-        ServerSidePacketRegistry.INSTANCE
+        ServerPlayNetworking.registerGlobalReceiver(LinkartNetworks.LINK_PACKET,
+                (server, player, handler, buffer, responseSender) -> {
+                    UUID next = buffer.readUuid();
+                    UUID previous = buffer.readUuid();
+                    ServerWorld serverWorld = player.getServerWorld();
+                    server.execute(() -> {
+                        ItemStack hand = player.getMainHandStack();
+                        if (hand.getItem() != Items.CHAIN) {
+                            player.sendMessage(
+                                    new TranslatableText(
+                                            "text.linkart.message.cart_link_failure_desynchronization")
+                                            .formatted(Formatting.RED),
+                                    true);
+                            return;
+                        } else if (!player.isCreative()) {
+                            hand.decrement(1);
+                        }
+                        AbstractMinecartEntity entityA = (AbstractMinecartEntity) serverWorld.getEntity(next);
+                                AbstractMinecartEntity entityB = (AbstractMinecartEntity) serverWorld
+                                        .getEntity(previous);
+                                AbstractMinecartEntityAccessor accessorA = (AbstractMinecartEntityAccessor) entityA;
+                                AbstractMinecartEntityAccessor accessorB = (AbstractMinecartEntityAccessor) entityB;
+                                assert accessorB != null;
+                                accessorB.setNext(entityA);
+                                assert accessorA != null;
+                                accessorA.setPrevious(entityB);
+                    });
+                });
+        ServerPlayNetworking.registerGlobalReceiver(LinkartNetworks.UNLINK_PACKET, (server, player, handler, buffer, responseSender) -> {
+            UUID next = buffer.readUuid();
+                    UUID previous = buffer.readUuid();
+                    ServerWorld serverWorld = player.getServerWorld();
+                    server.execute(() -> {
+                        AbstractMinecartEntity entityA = (AbstractMinecartEntity) serverWorld
+                                                        .getEntity(next);
+                                                AbstractMinecartEntity entityB = (AbstractMinecartEntity) serverWorld
+                                                        .getEntity(previous);
+                                                AbstractMinecartEntityAccessor accessorA = (AbstractMinecartEntityAccessor) entityA;
+                                                AbstractMinecartEntityAccessor accessorB = (AbstractMinecartEntityAccessor) entityB;
+                                                assert accessorA != null;
+                                                accessorA.setNext(null);
+                                                assert accessorB != null;
+                                                accessorB.setPrevious(null);
+                                                ItemScatterer.spawn(
+                                                        player.world,
+                                                        player.getX(),
+                                                        player.getY(),
+                                                        player.getZ(),
+                                                        new ItemStack(Items.CHAIN));
+                    });
+        });
+        /*ServerSidePacketRegistry.INSTANCE
                 .register(
                         LINK_PACKET,
                         (context, buffer) -> {
@@ -45,7 +94,8 @@ public class LinkartNetworks {
 
                                 if (hand.getItem() != Items.CHAIN) {
                                     player.sendMessage(
-                                            new TranslatableText("text.linkart.message.cart_link_failure_desynchronization")
+                                            new TranslatableText(
+                                                    "text.linkart.message.cart_link_failure_desynchronization")
                                                     .formatted(Formatting.RED),
                                             true);
                                     return;
@@ -54,7 +104,8 @@ public class LinkartNetworks {
                                 }
 
                                 AbstractMinecartEntity entityA = (AbstractMinecartEntity) serverWorld.getEntity(next);
-                                AbstractMinecartEntity entityB = (AbstractMinecartEntity) serverWorld.getEntity(previous);
+                                AbstractMinecartEntity entityB = (AbstractMinecartEntity) serverWorld
+                                        .getEntity(previous);
                                 AbstractMinecartEntityAccessor accessorA = (AbstractMinecartEntityAccessor) entityA;
                                 AbstractMinecartEntityAccessor accessorB = (AbstractMinecartEntityAccessor) entityB;
                                 assert accessorB != null;
@@ -62,8 +113,8 @@ public class LinkartNetworks {
                                 assert accessorA != null;
                                 accessorA.setPrevious(entityB);
                             });
-                        });
-        ServerSidePacketRegistry.INSTANCE
+                        });*/
+        /*ServerSidePacketRegistry.INSTANCE
                 .register(
                         UNLINK_PACKET,
                         (context, buffer) -> {
@@ -92,6 +143,6 @@ public class LinkartNetworks {
                                                         new ItemStack(Items.CHAIN));
 
                                             });
-                        });
+                        });*/
     }
 }

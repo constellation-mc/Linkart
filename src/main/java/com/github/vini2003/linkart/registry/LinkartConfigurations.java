@@ -7,7 +7,6 @@ import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 
 public class LinkartConfigurations {
-    //TODO migrate to newer versions of auto & cloth config
     public static ConfigHolder<LinkartConfiguration> INSTANCE;
 
     private LinkartConfigurations() {
