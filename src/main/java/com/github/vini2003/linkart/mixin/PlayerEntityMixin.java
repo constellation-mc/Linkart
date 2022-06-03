@@ -63,14 +63,10 @@ public class PlayerEntityMixin {
                             accessorA.setNext(null);
                             accessorB.setPrevious(null);
                             ClientPlayNetworking.send(LinkartNetworks.UNLINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
-                            /*ClientSidePacketRegistry.INSTANCE.sendToServer(LinkartNetworks.UNLINK_PACKET,
-                                    LinkartNetworks.createPacket(entityA, entityB));*/
                         } else if (boolB) {
                             accessorB.setNext(null);
                             accessorA.setPrevious(null);
                             ClientPlayNetworking.send(LinkartNetworks.UNLINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
-                            /*ClientSidePacketRegistry.INSTANCE.sendToServer(LinkartNetworks.UNLINK_PACKET,
-                                    LinkartNetworks.createPacket(entityB, entityA));*/
                         }
                         if (boolA || boolB) {
                             sendToClient(
@@ -109,7 +105,6 @@ public class PlayerEntityMixin {
                                 accessorB.setNext((AbstractMinecartEntity) entityA);
                                 ((AbstractMinecartEntityAccessor) accessorB.getNext()).setPrevious(entityB);
                                 ClientPlayNetworking.send(LinkartNetworks.LINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
-                                //ClientSidePacketRegistry.INSTANCE.sendToServer(LinkartNetworks.LINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
                                 sendToClient(
                                         playerEntity,
                                         new TranslatableText(
