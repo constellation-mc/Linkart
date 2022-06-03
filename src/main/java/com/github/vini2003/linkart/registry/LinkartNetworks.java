@@ -62,22 +62,24 @@ public class LinkartNetworks {
                     UUID next = buffer.readUuid();
                     UUID previous = buffer.readUuid();
                     ServerWorld serverWorld = player.getServerWorld();
+                    AbstractMinecartEntity entityA = (AbstractMinecartEntity) serverWorld
+                            .getEntity(next);
+                    AbstractMinecartEntity entityB = (AbstractMinecartEntity) serverWorld
+                            .getEntity(previous);
+                    AbstractMinecartEntityAccessor accessorA = (AbstractMinecartEntityAccessor) entityA;
+                    AbstractMinecartEntityAccessor accessorB = (AbstractMinecartEntityAccessor) entityB;
                     server.execute(() -> {
-                        AbstractMinecartEntity entityA = (AbstractMinecartEntity) serverWorld
-                                .getEntity(next);
-                        AbstractMinecartEntity entityB = (AbstractMinecartEntity) serverWorld
-                                .getEntity(previous);
-                        AbstractMinecartEntityAccessor accessorA = (AbstractMinecartEntityAccessor) entityA;
-                        AbstractMinecartEntityAccessor accessorB = (AbstractMinecartEntityAccessor) entityB;
                         assert accessorA != null;
-                        accessorA.setNext(null);
+                        accessorA.setPreviousUuid(null);
+                        accessorA.setPrevious(null);
                         assert accessorB != null;
-                        accessorB.setPrevious(null);
+                        accessorB.setNextUuid(null);
+                        accessorB.setNext(null);
                         ItemScatterer.spawn(
-                                player.world,
-                                player.getX(),
-                                player.getY(),
-                                player.getZ(),
+                                entityA.world,
+                                entityA.getX(),
+                                entityA.getY(),
+                                entityA.getZ(),
                                 new ItemStack(Items.CHAIN));
                     });
                 });
