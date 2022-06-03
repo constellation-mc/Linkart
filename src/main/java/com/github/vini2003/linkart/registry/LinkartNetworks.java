@@ -47,102 +47,39 @@ public class LinkartNetworks {
                             hand.decrement(1);
                         }
                         AbstractMinecartEntity entityA = (AbstractMinecartEntity) serverWorld.getEntity(next);
-                                AbstractMinecartEntity entityB = (AbstractMinecartEntity) serverWorld
-                                        .getEntity(previous);
-                                AbstractMinecartEntityAccessor accessorA = (AbstractMinecartEntityAccessor) entityA;
-                                AbstractMinecartEntityAccessor accessorB = (AbstractMinecartEntityAccessor) entityB;
-                                assert accessorB != null;
-                                accessorB.setNext(entityA);
-                                assert accessorA != null;
-                                accessorA.setPrevious(entityB);
+                        AbstractMinecartEntity entityB = (AbstractMinecartEntity) serverWorld
+                                .getEntity(previous);
+                        AbstractMinecartEntityAccessor accessorA = (AbstractMinecartEntityAccessor) entityA;
+                        AbstractMinecartEntityAccessor accessorB = (AbstractMinecartEntityAccessor) entityB;
+                        assert accessorB != null;
+                        accessorB.setNext(entityA);
+                        assert accessorA != null;
+                        accessorA.setPrevious(entityB);
                     });
                 });
-        ServerPlayNetworking.registerGlobalReceiver(LinkartNetworks.UNLINK_PACKET, (server, player, handler, buffer, responseSender) -> {
-            UUID next = buffer.readUuid();
+        ServerPlayNetworking.registerGlobalReceiver(LinkartNetworks.UNLINK_PACKET,
+                (server, player, handler, buffer, responseSender) -> {
+                    UUID next = buffer.readUuid();
                     UUID previous = buffer.readUuid();
                     ServerWorld serverWorld = player.getServerWorld();
                     server.execute(() -> {
                         AbstractMinecartEntity entityA = (AbstractMinecartEntity) serverWorld
-                                                        .getEntity(next);
-                                                AbstractMinecartEntity entityB = (AbstractMinecartEntity) serverWorld
-                                                        .getEntity(previous);
-                                                AbstractMinecartEntityAccessor accessorA = (AbstractMinecartEntityAccessor) entityA;
-                                                AbstractMinecartEntityAccessor accessorB = (AbstractMinecartEntityAccessor) entityB;
-                                                assert accessorA != null;
-                                                accessorA.setNext(null);
-                                                assert accessorB != null;
-                                                accessorB.setPrevious(null);
-                                                ItemScatterer.spawn(
-                                                        player.world,
-                                                        player.getX(),
-                                                        player.getY(),
-                                                        player.getZ(),
-                                                        new ItemStack(Items.CHAIN));
+                                .getEntity(next);
+                        AbstractMinecartEntity entityB = (AbstractMinecartEntity) serverWorld
+                                .getEntity(previous);
+                        AbstractMinecartEntityAccessor accessorA = (AbstractMinecartEntityAccessor) entityA;
+                        AbstractMinecartEntityAccessor accessorB = (AbstractMinecartEntityAccessor) entityB;
+                        assert accessorA != null;
+                        accessorA.setNext(null);
+                        assert accessorB != null;
+                        accessorB.setPrevious(null);
+                        ItemScatterer.spawn(
+                                player.world,
+                                player.getX(),
+                                player.getY(),
+                                player.getZ(),
+                                new ItemStack(Items.CHAIN));
                     });
-        });
-        /*ServerSidePacketRegistry.INSTANCE
-                .register(
-                        LINK_PACKET,
-                        (context, buffer) -> {
-                            UUID next = buffer.readUuid();
-                            UUID previous = buffer.readUuid();
-                            ServerWorld serverWorld = (ServerWorld) context.getPlayer().getEntityWorld();
-                            context.getTaskQueue().execute(() -> {
-                                PlayerEntity player = context.getPlayer();
-                                PlayerScreenHandler playerContainer = player.playerScreenHandler;
-                                ItemStack hand = context.getPlayer().getMainHandStack();
-
-                                if (hand.getItem() != Items.CHAIN) {
-                                    player.sendMessage(
-                                            new TranslatableText(
-                                                    "text.linkart.message.cart_link_failure_desynchronization")
-                                                    .formatted(Formatting.RED),
-                                            true);
-                                    return;
-                                } else if (!player.isCreative()) {
-                                    hand.decrement(1);
-                                }
-
-                                AbstractMinecartEntity entityA = (AbstractMinecartEntity) serverWorld.getEntity(next);
-                                AbstractMinecartEntity entityB = (AbstractMinecartEntity) serverWorld
-                                        .getEntity(previous);
-                                AbstractMinecartEntityAccessor accessorA = (AbstractMinecartEntityAccessor) entityA;
-                                AbstractMinecartEntityAccessor accessorB = (AbstractMinecartEntityAccessor) entityB;
-                                assert accessorB != null;
-                                accessorB.setNext(entityA);
-                                assert accessorA != null;
-                                accessorA.setPrevious(entityB);
-                            });
-                        });*/
-        /*ServerSidePacketRegistry.INSTANCE
-                .register(
-                        UNLINK_PACKET,
-                        (context, buffer) -> {
-                            UUID next = buffer.readUuid();
-                            UUID previous = buffer.readUuid();
-                            ServerWorld serverWorld = (ServerWorld) context.getPlayer().getEntityWorld();
-                            context.getTaskQueue()
-                                    .execute(
-                                            () -> {
-                                                AbstractMinecartEntity entityA = (AbstractMinecartEntity) serverWorld
-                                                        .getEntity(next);
-                                                AbstractMinecartEntity entityB = (AbstractMinecartEntity) serverWorld
-                                                        .getEntity(previous);
-                                                AbstractMinecartEntityAccessor accessorA = (AbstractMinecartEntityAccessor) entityA;
-                                                AbstractMinecartEntityAccessor accessorB = (AbstractMinecartEntityAccessor) entityB;
-                                                assert accessorA != null;
-                                                accessorA.setNext(null);
-                                                assert accessorB != null;
-                                                accessorB.setPrevious(null);
-                                                PlayerEntity playerEntity = context.getPlayer();
-                                                ItemScatterer.spawn(
-                                                        playerEntity.world,
-                                                        playerEntity.getX(),
-                                                        playerEntity.getY(),
-                                                        playerEntity.getZ(),
-                                                        new ItemStack(Items.CHAIN));
-
-                                            });
-                        });*/
+                });
     }
 }

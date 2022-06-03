@@ -8,7 +8,6 @@ import com.github.vini2003.linkart.registry.LinkartNetworks;
 import com.github.vini2003.linkart.utility.TextUtils;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
@@ -69,7 +68,7 @@ public class PlayerEntityMixin {
                         } else if (boolB) {
                             accessorB.setNext(null);
                             accessorA.setPrevious(null);
-                            ClientPlayNetworking.send(LinkartNetworks.LINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
+                            ClientPlayNetworking.send(LinkartNetworks.UNLINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
                             /*ClientSidePacketRegistry.INSTANCE.sendToServer(LinkartNetworks.UNLINK_PACKET,
                                     LinkartNetworks.createPacket(entityB, entityA));*/
                         }
