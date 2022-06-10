@@ -5,10 +5,10 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "AbstractMinecartEntityMixin",
-    "EntityMixin",
-    "PlayerEntityMixin"
+    "EntityMixin"
   ],
   "client": [
+    "PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
