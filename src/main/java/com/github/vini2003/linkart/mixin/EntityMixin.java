@@ -26,14 +26,11 @@ public abstract class EntityMixin {
     @Shadow
     public abstract Box getBoundingBox();
 
-    @Inject(
-            at = {@At("RETURN")},
-            method = {"writeNbt(Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/nbt/NbtCompound;"}
-    )
+    @Inject(at = {@At("RETURN")}, method = {"writeNbt"})
     void onToTag(NbtCompound tag, CallbackInfoReturnable<NbtCompound> callbackInformationReturnable) {
-        if ((Object) this instanceof AbstractMinecartEntity) {
-            AbstractMinecartEntity entity = (AbstractMinecartEntity) (Object) this;
-            AbstractMinecartEntityAccessor accessor = (AbstractMinecartEntityAccessor) entity;
+        Entity entity = ((Entity) (Object) this);
+        if (entity instanceof AbstractMinecartEntity abstractMinecartEntity) {
+            AbstractMinecartEntityAccessor accessor = (AbstractMinecartEntityAccessor) abstractMinecartEntity;
             if (accessor.getNext() != null) {
                 tag.putUuid("next", accessor.getNext().getUuid());
             }
@@ -45,14 +42,11 @@ public abstract class EntityMixin {
 
     }
 
-    @Inject(
-            at = {@At("RETURN")},
-            method = {"readNbt(Lnet/minecraft/nbt/NbtCompound;)V"}
-    )
+    @Inject(at = @At("HEAD"), method = "readNbt")
     void onFromTag(NbtCompound tag, CallbackInfo callbackInformation) {
-        if ((Object) this instanceof AbstractMinecartEntity) {
-            AbstractMinecartEntity entity = (AbstractMinecartEntity) (Object) this;
-            AbstractMinecartEntityAccessor accessor = (AbstractMinecartEntityAccessor) entity;
+        Entity entity = ((Entity) (Object) this);
+        if (entity instanceof AbstractMinecartEntity abstractMinecartEntity) {
+            AbstractMinecartEntityAccessor accessor = (AbstractMinecartEntityAccessor) abstractMinecartEntity;
             if (tag.containsUuid("next")) {
                 accessor.setNextUuid(tag.getUuid("next"));
             }
@@ -66,8 +60,9 @@ public abstract class EntityMixin {
 
     @Inject(at = @At("HEAD"), method = "remove")
     void removeLink(CallbackInfo callbackInformation) {
-        if ((Object) this instanceof AbstractMinecartEntity) {
-            AbstractMinecartEntityAccessor accessor = (AbstractMinecartEntityAccessor) this;
+        Entity entity = ((Entity) (Object) this);
+        if (entity instanceof AbstractMinecartEntity) {
+            AbstractMinecartEntityAccessor accessor = (AbstractMinecartEntityAccessor) entity;
             AbstractMinecartEntityAccessor next = (AbstractMinecartEntityAccessor) accessor.getNext();
             AbstractMinecartEntityAccessor previous = (AbstractMinecartEntityAccessor) accessor.getPrevious();
 
@@ -81,12 +76,12 @@ public abstract class EntityMixin {
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "adjustMovementForCollisions(Lnet/minecraft/util/math/Vec3d;)Lnet/minecraft/util/math/Vec3d;", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "adjustMovementForCollisions*", cancellable = true)
     void onRecalculateVelocity(Vec3d movement, CallbackInfoReturnable<Vec3d> callbackInformationReturnable) {
         List<Entity> collisions = this.world.getOtherEntities((Entity) (Object) this, getBoundingBox().stretch(movement));
 
         for (Entity entity : collisions) {
-            if (!CollisionUtils.shouldCollide((Entity) (Object) this, entity) && world.getBlockState(((AbstractMinecartEntity) (Object) this).getBlockPos()).getBlock() instanceof AbstractRailBlock) {
+            if (!CollisionUtils.shouldCollide((Entity) (Object) this, entity) && world.getBlockState(((Entity) (Object) this).getBlockPos()).getBlock() instanceof AbstractRailBlock) {
                 callbackInformationReturnable.setReturnValue(movement);
                 callbackInformationReturnable.cancel();
             }

@@ -1,7 +1,6 @@
 package com.github.vini2003.linkart.utility;
 
 import com.github.vini2003.linkart.registry.LinkartConfigurations;
-import com.github.vini2003.linkart.registry.LinkartDistanceRegistry;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.enums.RailShape;
@@ -24,9 +23,7 @@ public class RailUtils {
 
         List<BlockPos> fuck = (List<BlockPos>) getNeighbors(next.getBlockPos(), state.get(((AbstractRailBlock) state.getBlock()).getShapeProperty()));
 
-        if (!(state.getBlock() instanceof AbstractRailBlock)) {
-            return null;
-        } else {
+        if (state.getBlock() instanceof AbstractRailBlock) {
             for (BlockPos initialPosition : fuck) {
                 Set<BlockPos> cache = new HashSet<>();
 
@@ -39,15 +36,13 @@ public class RailUtils {
                 }
             }
 
-            return null;
         }
+        return null;
     }
 
     public static Vec3d getNextVelocity(AbstractMinecartEntity entityA, AbstractMinecartEntity entityB) {
         Pair<BlockPos, MutableDouble> pair = getNextRail(entityA, entityB);
-        double maximumDistance = Math.max(
-                LinkartDistanceRegistry.INSTANCE.getByKey(entityA.getType()), LinkartDistanceRegistry.INSTANCE.getByKey(entityB.getType())
-        );
+        double maximumDistance = 1.0;
         if (pair == null && entityA.world.getRegistryKey() == entityB.world.getRegistryKey()) {
             return new Vec3d(
                     entityB.getX() - entityA.getX(), entityB.getY() - entityA.getY(), entityB.getY() - entityA.getY()
@@ -119,61 +114,62 @@ public class RailUtils {
     public static Collection<BlockPos> getNeighbors(BlockPos position, RailShape shape) {
         List<BlockPos> neighbors = new ArrayList<>();
         switch (shape) {
-            case NORTH_SOUTH:
+            case NORTH_SOUTH -> {
                 neighbors.add(position.north());
                 neighbors.add(position.south());
                 neighbors.add(position.north().down());
                 neighbors.add(position.south().down());
-                break;
-            case EAST_WEST:
+            }
+            case EAST_WEST -> {
                 neighbors.add(position.west());
                 neighbors.add(position.east());
                 neighbors.add(position.west().down());
                 neighbors.add(position.east().down());
-                break;
-            case ASCENDING_EAST:
+            }
+            case ASCENDING_EAST -> {
                 neighbors.add(position.west().down());
                 neighbors.add(position.west());
                 neighbors.add(position.east().up());
-                break;
-            case ASCENDING_WEST:
+            }
+            case ASCENDING_WEST -> {
                 neighbors.add(position.west().up());
                 neighbors.add(position.east());
                 neighbors.add(position.east().down());
-                break;
-            case ASCENDING_NORTH:
+            }
+            case ASCENDING_NORTH -> {
                 neighbors.add(position.north().up());
                 neighbors.add(position.south());
                 neighbors.add(position.south().down());
-                break;
-            case ASCENDING_SOUTH:
+            }
+            case ASCENDING_SOUTH -> {
                 neighbors.add(position.north().down());
                 neighbors.add(position.north());
                 neighbors.add(position.south().up());
-                break;
-            case SOUTH_EAST:
+            }
+            case SOUTH_EAST -> {
                 neighbors.add(position.east());
                 neighbors.add(position.south());
                 neighbors.add(position.east().down());
                 neighbors.add(position.south().down());
-                break;
-            case SOUTH_WEST:
+            }
+            case SOUTH_WEST -> {
                 neighbors.add(position.west());
                 neighbors.add(position.south());
                 neighbors.add(position.west().down());
                 neighbors.add(position.south().down());
-                break;
-            case NORTH_WEST:
+            }
+            case NORTH_WEST -> {
                 neighbors.add(position.west());
                 neighbors.add(position.north());
                 neighbors.add(position.west().down());
                 neighbors.add(position.north().down());
-                break;
-            case NORTH_EAST:
+            }
+            case NORTH_EAST -> {
                 neighbors.add(position.east());
                 neighbors.add(position.north());
                 neighbors.add(position.east().down());
                 neighbors.add(position.north().down());
+            }
         }
 
         return neighbors;

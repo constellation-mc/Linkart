@@ -11,11 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.Pair;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.mutable.MutableDouble;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -85,10 +82,7 @@ public abstract class AbstractMinecartEntityMixin implements AbstractMinecartEnt
         this.nextUuid = uuid;
     }
 
-    @Inject(
-            at = {@At("HEAD")},
-            method = {"tick()V"}
-    )
+    @Inject(at = @At("HEAD"), method = "tick")
     void onTickCommon(CallbackInfo callbackInformation) {
         World mixedWorld = ((AbstractMinecartEntity) (Object) this).world;
         AbstractMinecartEntity next = (AbstractMinecartEntity) (Object) this;
@@ -96,7 +90,6 @@ public abstract class AbstractMinecartEntityMixin implements AbstractMinecartEnt
         AbstractMinecartEntityAccessor accessor = (AbstractMinecartEntityAccessor) next;
         if (!mixedWorld.isClient && accessor.getPrevious() != null) {
             AbstractMinecartEntity previous = accessor.getPrevious();
-            Pair<BlockPos, MutableDouble> nextRail = RailUtils.getNextRail(next, previous);
             Vec3d nextVelocity = RailUtils.getNextVelocity(next, previous);
             if (nextVelocity != null) {
                 if ((next.getPos().distanceTo(previous.getPos()) > LinkartConfigurations.INSTANCE.getConfig().getPathfindingDistance()) && getPrevious() != null) {

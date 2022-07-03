@@ -3,10 +3,8 @@ package com.github.vini2003.linkart.mixin;
 import com.github.vini2003.linkart.Linkart;
 import com.github.vini2003.linkart.accessor.AbstractMinecartEntityAccessor;
 import com.github.vini2003.linkart.registry.LinkartConfigurations;
-import com.github.vini2003.linkart.registry.LinkartLinkerRegistry;
 import com.github.vini2003.linkart.registry.LinkartNetworks;
 import com.github.vini2003.linkart.utility.TextUtils;
-
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,36 +25,35 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin({PlayerEntity.class})
 public class PlayerEntityMixin {
 
-    @Inject(at = {@At("HEAD")}, method = {
-            "interact(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;"}, cancellable = true)
-    void onInteract(Entity entityA, Hand hand, CallbackInfoReturnable<ActionResult> callbackInformationReturnable) {
+    @Inject(at = @At("HEAD"), method = "interact", cancellable = true)
+    void onInteract(Entity entityA, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
         if (entityA instanceof AbstractMinecartEntity && hand == Hand.MAIN_HAND && entityA.world.isClient) {
-            PlayerEntity playerEntity = (PlayerEntity) (Object) this;
-            ItemStack itemStack = playerEntity.getStackInHand(hand);
-            Item heldItem = itemStack.getItem();
-            if (!LinkartLinkerRegistry.INSTANCE.getByKey(entityA.getType()).stream().noneMatch(item -> item == heldItem)) {
+            PlayerEntity player = (PlayerEntity) (Object) this;
+            ItemStack stackInHand = player.getStackInHand(hand);
+            Item heldItem = stackInHand.getItem();
+            if (heldItem == Items.CHAIN) {
                 double x1 = entityA.getX();
                 double y1 = entityA.getY();
                 double z1 = entityA.getZ();
-                if (Linkart.SELECTED_ENTITIES.get(playerEntity) == null) {
-                    Linkart.SELECTED_ENTITIES.put(playerEntity, (AbstractMinecartEntity) entityA);
+                if (Linkart.SELECTED_ENTITIES.get(player) == null) {
+                    Linkart.SELECTED_ENTITIES.put(player, (AbstractMinecartEntity) entityA);
                     sendToClient(
-                            playerEntity,
+                            player,
                             new TranslatableText(
                                     "text.linkart.message.cart.link_initialize",
                                     TextUtils.literal((int) x1, Formatting.GREEN),
                                     TextUtils.literal((int) y1, Formatting.GREEN),
                                     TextUtils.literal((int) z1, Formatting.GREEN)));
-                    cancelCallback(callbackInformationReturnable);
+                    cancelCallback(cir);
                 } else {
                     AbstractMinecartEntityAccessor accessorA = (AbstractMinecartEntityAccessor) entityA;
                     AbstractMinecartEntity entityB = Linkart.SELECTED_ENTITIES
-                            .get(playerEntity);
+                            .get(player);
                     AbstractMinecartEntityAccessor accessorB = (AbstractMinecartEntityAccessor) entityB;
                     double x2 = entityB.getX();
                     double y2 = entityB.getY();
                     double z2 = entityB.getZ();
-                    if (playerEntity.world.isClient) {
+                    if (player.world.isClient) {
                         boolean boolA = accessorA.getNext() == entityB && accessorB.getPrevious() == entityA;
                         boolean boolB = accessorB.getNext() == entityA && accessorA.getPrevious() == entityB;
                         if (boolA) {
@@ -70,7 +67,7 @@ public class PlayerEntityMixin {
                         }
                         if (boolA || boolB) {
                             sendToClient(
-                                    playerEntity,
+                                    player,
                                     new TranslatableText(
                                             "text.linkart.message.cart_unlink_success",
                                             TextUtils.literal((int) x1, Formatting.YELLOW),
@@ -79,49 +76,45 @@ public class PlayerEntityMixin {
                                             TextUtils.literal((int) x2, Formatting.YELLOW),
                                             TextUtils.literal((int) y2, Formatting.YELLOW),
                                             TextUtils.literal((int) z2, Formatting.YELLOW)));
-                            cancelCallback(callbackInformationReturnable, playerEntity);
+                            cancelCallback(cir, player);
                             return;
                         }
                     }
                     if (entityA == entityB) {
-                        sendToClient(playerEntity, new TranslatableText("text.linkart.message.cart_link_failure_self")
+                        sendToClient(player, new TranslatableText("text.linkart.message.cart_link_failure_self")
                                 .formatted(Formatting.RED));
-                        cancelCallback(callbackInformationReturnable, playerEntity);
+                        cancelCallback(cir, player);
                     } else if (accessorB.getPrevious() != entityA && accessorA.getNext() != entityB) {
 
                         int pD = (LinkartConfigurations.INSTANCE.getConfig())
                                 .getPathfindingDistance();
                         if (entityA.getPos().distanceTo(entityB.getPos()) > (double) pD) {
                             sendToClient(
-                                    playerEntity,
+                                    player,
                                     new TranslatableText("text.linkart.message.cart_link_failure_distance",
                                             TextUtils.literal(pD))
                                             .formatted(Formatting.RED));
-                            cancelCallback(callbackInformationReturnable, playerEntity);
+                            cancelCallback(cir, player);
                         } else {
-                            if (heldItem != Items.CHAIN) {
-                                sendToClient(playerEntity, new TranslatableText("text.linkart.message.cart_link_failure_chain").formatted(Formatting.RED));
-                            } else {
-                                accessorB.setNext((AbstractMinecartEntity) entityA);
-                                ((AbstractMinecartEntityAccessor) accessorB.getNext()).setPrevious(entityB);
-                                ClientPlayNetworking.send(LinkartNetworks.LINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
-                                sendToClient(
-                                        playerEntity,
-                                        new TranslatableText(
-                                                "text.linkart.message.cart_link_success",
-                                                TextUtils.literal((int) x1, Formatting.GREEN),
-                                                TextUtils.literal((int) y1, Formatting.GREEN),
-                                                TextUtils.literal((int) z1, Formatting.GREEN),
-                                                TextUtils.literal((int) x2, Formatting.GREEN),
-                                                TextUtils.literal((int) y2, Formatting.GREEN),
-                                                TextUtils.literal((int) z2, Formatting.GREEN))
-                                );
-                            }
-                            cancelCallback(callbackInformationReturnable, playerEntity);
+                            accessorB.setNext((AbstractMinecartEntity) entityA);
+                            ((AbstractMinecartEntityAccessor) accessorB.getNext()).setPrevious(entityB);
+                            ClientPlayNetworking.send(LinkartNetworks.LINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
+                            sendToClient(
+                                    player,
+                                    new TranslatableText(
+                                            "text.linkart.message.cart_link_success",
+                                            TextUtils.literal((int) x1, Formatting.GREEN),
+                                            TextUtils.literal((int) y1, Formatting.GREEN),
+                                            TextUtils.literal((int) z1, Formatting.GREEN),
+                                            TextUtils.literal((int) x2, Formatting.GREEN),
+                                            TextUtils.literal((int) y2, Formatting.GREEN),
+                                            TextUtils.literal((int) z2, Formatting.GREEN))
+                            );
+                            cancelCallback(cir, player);
                         }
                     } else {
-                        sendToClient(playerEntity, new TranslatableText("text.linkart.message.cart_link_failure_recursion").formatted(Formatting.RED));
-                        cancelCallback(callbackInformationReturnable, playerEntity);
+                        sendToClient(player, new TranslatableText("text.linkart.message.cart_link_failure_recursion").formatted(Formatting.RED));
+                        cancelCallback(cir, player);
                     }
                 }
 

@@ -21,6 +21,4 @@ public interface AbstractMinecartEntityAccessor {
     UUID getNextUuid();
 
     void setNextUuid(UUID var1);
-
-    double squaredDistanceTo(double x, double y, double z);
 }

@@ -3,11 +3,11 @@ package com.github.vini2003.linkart.utility;
 import com.github.vini2003.linkart.accessor.AbstractMinecartEntityAccessor;
 import com.github.vini2003.linkart.registry.LinkartConfigurations;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 
 public class CollisionUtils {
     public static boolean shouldCollide(Entity source, Entity target) {
-        if (source instanceof AbstractMinecartEntityAccessor) {
-            AbstractMinecartEntityAccessor check = (AbstractMinecartEntityAccessor) source;
+        if (source instanceof AbstractMinecartEntity check) {
             int i = 0;
 
             do {
@@ -15,15 +15,15 @@ public class CollisionUtils {
                     return false;
                 }
 
-                check = (AbstractMinecartEntityAccessor) check.getNext();
+                check = ((AbstractMinecartEntityAccessor) check).getNext();
                 ++i;
             } while (check != null && i < LinkartConfigurations.INSTANCE.getConfig().getCollisionDepth());
 
-            check = (AbstractMinecartEntityAccessor) source;
+            check = (AbstractMinecartEntity) source;
             i = 0;
 
             while (check != target) {
-                check = (AbstractMinecartEntityAccessor) check.getPrevious();
+                check = ((AbstractMinecartEntityAccessor) check).getPrevious();
                 ++i;
                 if (check == null || i >= LinkartConfigurations.INSTANCE.getConfig().getCollisionDepth()) {
                     return true;
