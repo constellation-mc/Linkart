@@ -33,7 +33,7 @@ public class LinkartNetworks {
                 (server, player, handler, buffer, responseSender) -> {
                     UUID next = buffer.readUuid();
                     UUID previous = buffer.readUuid();
-                    ServerWorld serverWorld = player.getServerWorld();
+                    ServerWorld serverWorld = player.getWorld();
                     server.execute(() -> {
                         ItemStack hand = player.getMainHandStack();
                         if (!hand.isIn(LinkartTags.LINKER_ITEMS)) {
@@ -61,7 +61,7 @@ public class LinkartNetworks {
                 (server, player, handler, buffer, responseSender) -> {
                     UUID next = buffer.readUuid();
                     UUID previous = buffer.readUuid();
-                    ServerWorld serverWorld = player.getServerWorld();
+                    ServerWorld serverWorld = player.getWorld();
                     AbstractMinecartEntity entityA = (AbstractMinecartEntity) serverWorld
                             .getEntity(next);
                     AbstractMinecartEntity entityB = (AbstractMinecartEntity) serverWorld
