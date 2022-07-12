@@ -36,7 +36,7 @@ public class LinkartNetworks {
                     ServerWorld serverWorld = player.getServerWorld();
                     server.execute(() -> {
                         ItemStack hand = player.getMainHandStack();
-                        if (hand.getItem() != Items.CHAIN) {
+                        if (!hand.isIn(LinkartTags.LINKER_ITEMS)) {
                             player.sendMessage(
                                     new TranslatableText(
                                             "text.linkart.message.cart_link_failure_desynchronization")

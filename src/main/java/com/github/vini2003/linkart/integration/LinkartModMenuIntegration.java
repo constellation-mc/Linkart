@@ -7,7 +7,6 @@ import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.gui.screen.Screen;
 
 public class LinkartModMenuIntegration implements ModMenuApi {
-
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return screen -> (Screen) AutoConfig.getConfigScreen(LinkartConfiguration.class, screen).get();
     }

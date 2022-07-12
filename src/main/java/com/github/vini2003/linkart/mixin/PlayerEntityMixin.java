@@ -4,6 +4,7 @@ import com.github.vini2003.linkart.Linkart;
 import com.github.vini2003.linkart.accessor.AbstractMinecartEntityAccessor;
 import com.github.vini2003.linkart.registry.LinkartConfigurations;
 import com.github.vini2003.linkart.registry.LinkartNetworks;
+import com.github.vini2003.linkart.registry.LinkartTags;
 import com.github.vini2003.linkart.utility.TextUtils;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.entity.Entity;
@@ -11,7 +12,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
@@ -30,25 +30,20 @@ public class PlayerEntityMixin {
         if (entityA instanceof AbstractMinecartEntity && hand == Hand.MAIN_HAND && entityA.world.isClient) {
             PlayerEntity player = (PlayerEntity) (Object) this;
             ItemStack stackInHand = player.getStackInHand(hand);
-            Item heldItem = stackInHand.getItem();
-            if (heldItem == Items.CHAIN) {
+            if (stackInHand.isIn(LinkartTags.LINKER_ITEMS)) {
                 double x1 = entityA.getX();
                 double y1 = entityA.getY();
                 double z1 = entityA.getZ();
                 if (Linkart.SELECTED_ENTITIES.get(player) == null) {
                     Linkart.SELECTED_ENTITIES.put(player, (AbstractMinecartEntity) entityA);
-                    sendToClient(
-                            player,
-                            new TranslatableText(
-                                    "text.linkart.message.cart.link_initialize",
+                    sendToClient(player, new TranslatableText("text.linkart.message.cart.link_initialize",
                                     TextUtils.literal((int) x1, Formatting.GREEN),
                                     TextUtils.literal((int) y1, Formatting.GREEN),
                                     TextUtils.literal((int) z1, Formatting.GREEN)));
                     cancelCallback(cir);
                 } else {
                     AbstractMinecartEntityAccessor accessorA = (AbstractMinecartEntityAccessor) entityA;
-                    AbstractMinecartEntity entityB = Linkart.SELECTED_ENTITIES
-                            .get(player);
+                    AbstractMinecartEntity entityB = Linkart.SELECTED_ENTITIES.get(player);
                     AbstractMinecartEntityAccessor accessorB = (AbstractMinecartEntityAccessor) entityB;
                     double x2 = entityB.getX();
                     double y2 = entityB.getY();
@@ -68,8 +63,7 @@ public class PlayerEntityMixin {
                         if (boolA || boolB) {
                             sendToClient(
                                     player,
-                                    new TranslatableText(
-                                            "text.linkart.message.cart_unlink_success",
+                                    new TranslatableText("text.linkart.message.cart_unlink_success",
                                             TextUtils.literal((int) x1, Formatting.YELLOW),
                                             TextUtils.literal((int) y1, Formatting.YELLOW),
                                             TextUtils.literal((int) z1, Formatting.YELLOW),
@@ -81,27 +75,19 @@ public class PlayerEntityMixin {
                         }
                     }
                     if (entityA == entityB) {
-                        sendToClient(player, new TranslatableText("text.linkart.message.cart_link_failure_self")
-                                .formatted(Formatting.RED));
+                        sendToClient(player, new TranslatableText("text.linkart.message.cart_link_failure_self").formatted(Formatting.RED));
                         cancelCallback(cir, player);
                     } else if (accessorB.getPrevious() != entityA && accessorA.getNext() != entityB) {
 
-                        int pD = (LinkartConfigurations.INSTANCE.getConfig())
-                                .getPathfindingDistance();
+                        int pD = (LinkartConfigurations.INSTANCE.getConfig()).getPathfindingDistance();
                         if (entityA.getPos().distanceTo(entityB.getPos()) > (double) pD) {
-                            sendToClient(
-                                    player,
-                                    new TranslatableText("text.linkart.message.cart_link_failure_distance",
-                                            TextUtils.literal(pD))
-                                            .formatted(Formatting.RED));
+                            sendToClient(player, new TranslatableText("text.linkart.message.cart_link_failure_distance", TextUtils.literal(pD)).formatted(Formatting.RED));
                             cancelCallback(cir, player);
                         } else {
                             accessorB.setNext((AbstractMinecartEntity) entityA);
                             ((AbstractMinecartEntityAccessor) accessorB.getNext()).setPrevious(entityB);
                             ClientPlayNetworking.send(LinkartNetworks.LINK_PACKET, LinkartNetworks.createPacket(entityA, entityB));
-                            sendToClient(
-                                    player,
-                                    new TranslatableText(
+                            sendToClient(player, new TranslatableText(
                                             "text.linkart.message.cart_link_success",
                                             TextUtils.literal((int) x1, Formatting.GREEN),
                                             TextUtils.literal((int) y1, Formatting.GREEN),

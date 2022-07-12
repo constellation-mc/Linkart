@@ -128,11 +128,7 @@ public abstract class AbstractMinecartEntityMixin implements AbstractMinecartEnt
         }
     }
 
-    @Inject(
-            at = {@At("HEAD")},
-            method = {"pushAwayFrom(Lnet/minecraft/entity/Entity;)V"},
-            cancellable = true
-    )
+    @Inject(at = @At("HEAD"), method = "pushAwayFrom", cancellable = true)
     void onPushAway(Entity entity, CallbackInfo callbackInformation) {
         if (!CollisionUtils.shouldCollide((Entity) (Object) this, entity)) {
             callbackInformation.cancel();

@@ -26,7 +26,7 @@ public abstract class EntityMixin {
     @Shadow
     public abstract Box getBoundingBox();
 
-    @Inject(at = {@At("RETURN")}, method = {"writeNbt"})
+    @Inject(at = @At("RETURN"), method = "writeNbt")
     void onToTag(NbtCompound tag, CallbackInfoReturnable<NbtCompound> callbackInformationReturnable) {
         Entity entity = ((Entity) (Object) this);
         if (entity instanceof AbstractMinecartEntity abstractMinecartEntity) {
