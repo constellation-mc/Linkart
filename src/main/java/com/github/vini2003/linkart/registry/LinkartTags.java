@@ -1,13 +1,12 @@
 package com.github.vini2003.linkart.registry;
 
-import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.item.Item;
-import net.minecraft.tag.Tag;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class LinkartTags {
-    @Deprecated(since = "3.1.1-1.17")
-    public static final Tag<Item> LINKER_ITEMS = TagRegistry.item(new Identifier("linkart", "linker_items"));
+    public static final TagKey<Item> LINKER_ITEMS = TagKey.of(Registry.ITEM_KEY, new Identifier("linkart", "linker_items"));
 
     public static void initialize() {}
 }
