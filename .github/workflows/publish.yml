@@ -41,6 +41,8 @@ jobs:
             fabric
 
           java: |
+            8
+            16
             17
 
           modrinth-id: sc4Mu9Zu
