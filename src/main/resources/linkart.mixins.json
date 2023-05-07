@@ -6,6 +6,7 @@
   "mixins": [
     "AbstractMinecartEntityMixin",
     "EntityMixin",
+    "PersistentStateAccessor",
     "PlayerEntityMixin"
   ],
   "client": [
