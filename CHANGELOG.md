@@ -1,8 +1,6 @@
 ### What's New
 
-This is a pretty big rewrite of the mod.
-
-* This mod no longer requires cloth-config, because the entire modmenu integration was removed.
-* Every minecart, from every mod should be supported now.
-* `linker_items` tag was renamed to `linkers`.
-* The mod should no longer be required on client.
+* Added chunkloading (off by default). Allows linked parent carts to load chunks, only if they're moving.
+* * Chunkloading will also persist after world reload.
+* Added `/linkart` command. Currently, allows reloading the config.
+* Replaced success/fail texts with particles.
