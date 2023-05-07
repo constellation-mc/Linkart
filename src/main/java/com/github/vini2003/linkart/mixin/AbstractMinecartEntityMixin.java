@@ -3,6 +3,7 @@ package com.github.vini2003.linkart.mixin;
 import com.github.vini2003.linkart.Linkart;
 import com.github.vini2003.linkart.accessor.LinkableMinecartsAccessor;
 import com.github.vini2003.linkart.utility.CollisionUtils;
+import com.github.vini2003.linkart.utility.LoadingCarts;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -12,6 +13,7 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -54,6 +56,7 @@ public abstract class AbstractMinecartEntityMixin extends Entity implements Link
                     linkart$unlink();
                     return;
                 }
+
                 Vec3d pos = getPos();
                 Vec3d pos2 = linkart$getFollowing().getPos();
                 double dist = Math.abs(pos.distanceTo(pos2)) - 1.2;
@@ -70,7 +73,18 @@ public abstract class AbstractMinecartEntityMixin extends Entity implements Link
                     }
                 }
             }
+
+            if (linkart$getFollower() != null) {
+                if (Linkart.CONFIG.chunkloading && !approximatelyZero(this.getVelocity().length())) {
+                    ((ServerWorld)this.world).getChunkManager().addTicket(ChunkTicketType.PORTAL, this.getChunkPos(), Linkart.CONFIG.chunkloadingRadius, this.getBlockPos());
+                    LoadingCarts.getOrCreate((ServerWorld) world).addCart((AbstractMinecartEntity) (Object) this);
+                }
+            }
         }
+    }
+
+    private static boolean approximatelyZero(double a) {
+        return Math.abs(0 - a) < 0.00029146489604938;
     }
 
     private void linkart$unlink() {
