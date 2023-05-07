@@ -15,6 +15,7 @@ import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -76,7 +77,7 @@ public abstract class AbstractMinecartEntityMixin extends Entity implements Link
 
             if (linkart$getFollower() != null) {
                 if (Linkart.CONFIG.chunkloading && !approximatelyZero(this.getVelocity().length())) {
-                    ((ServerWorld)this.world).getChunkManager().addTicket(ChunkTicketType.PORTAL, this.getChunkPos(), Linkart.CONFIG.chunkloadingRadius, this.getBlockPos());
+                    ((ServerWorld)this.world).getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(this.getBlockPos()), Linkart.CONFIG.chunkloadingRadius, this.getBlockPos());
                     LoadingCarts.getOrCreate((ServerWorld) world).addCart((AbstractMinecartEntity) (Object) this);
                 }
             }

@@ -16,19 +16,25 @@ import java.util.Set;
 
 public class LoadingCarts extends PersistentState {
     public static LoadingCarts getOrCreate(ServerWorld world) {
-        return  (world).getPersistentStateManager().getOrCreate((nbt) -> {
-            LoadingCarts carts = new LoadingCarts(world);
-            carts.readNbt(nbt);
-            return carts;
-        }, () -> new LoadingCarts(world), "linkart_loading_carts");
+        return  (world).getPersistentStateManager().getOrCreate(() -> new LoadingCarts(world), "linkart_loading_carts");
     }
     private final ServerWorld world;
 
     public LoadingCarts(ServerWorld world) {
+        super("linkart_loading_carts");
         this.world = world;
     }
     private final Set<BlockPos> chunksToReload = new HashSet<>();
     private final Set<AbstractMinecartEntity> cartsToBlockPos = new HashSet<>();
+
+    @Override
+    public void fromTag(NbtCompound tag) {
+        NbtList list = tag.getList("chunksToSave", 4);
+        for (NbtElement element : list) {
+            chunksToReload.add(BlockPos.fromLong(((NbtLong) element).longValue()));
+        }
+    }
+
     @Override
     public NbtCompound writeNbt(NbtCompound nbt) {
         NbtList list = new NbtList();
@@ -38,13 +44,6 @@ public class LoadingCarts extends PersistentState {
         nbt.put("chunksToSave", list);
         cartsToBlockPos.clear();
         return nbt;
-    }
-
-    public void readNbt(NbtCompound nbt) {
-        NbtList list = nbt.getList("chunksToSave", NbtElement.LONG_TYPE);
-        for (NbtElement element : list) {
-            chunksToReload.add(BlockPos.fromLong(((NbtLong) element).longValue()));
-        }
     }
 
     public void tick() {
