@@ -39,7 +39,7 @@ public class LoadingCarts extends PersistentState {
     public NbtCompound writeNbt(NbtCompound nbt) {
         NbtList list = new NbtList();
         for (AbstractMinecartEntity minecart : cartsToBlockPos) {
-            if (!minecart.isRemoved()) list.add(NbtLong.of(minecart.getBlockPos().asLong()));
+            if (!minecart.removed) list.add(NbtLong.of(minecart.getBlockPos().asLong()));
         }
         nbt.put("chunksToSave", list);
         cartsToBlockPos.clear();
