@@ -49,6 +49,10 @@ public abstract class AbstractMinecartEntityMixin extends Entity implements Link
         }
     }
 
+    private static boolean approximatelyZero(double a) {
+        return Math.abs(0 - a) < 0.00029146489604938;
+    }
+
     @Inject(at = @At("HEAD"), method = "tick")
     private void linkart$tick(CallbackInfo ci) {
         if (!world.isClient()) {
@@ -75,17 +79,15 @@ public abstract class AbstractMinecartEntityMixin extends Entity implements Link
                 }
             }
 
-            if (linkart$getFollower() != null) {
-                if (Linkart.CONFIG.chunkloading && !approximatelyZero(this.getVelocity().length())) {
-                    ((ServerWorld)this.world).getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(this.getBlockPos()), Linkart.CONFIG.chunkloadingRadius, this.getBlockPos());
+            if (Linkart.CONFIG.chunkloading) {
+                if (linkart$getFollower() != null && !approximatelyZero(this.getVelocity().length())) {
+                    ((ServerWorld) this.world).getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(this.getBlockPos()), Linkart.CONFIG.chunkloadingRadius, this.getBlockPos());
                     LoadingCarts.getOrCreate((ServerWorld) world).addCart((AbstractMinecartEntity) (Object) this);
+                } else {
+                    LoadingCarts.getOrCreate((ServerWorld) world).removeCart((AbstractMinecartEntity) (Object) this);
                 }
             }
         }
-    }
-
-    private static boolean approximatelyZero(double a) {
-        return Math.abs(0 - a) < 0.00029146489604938;
     }
 
     private void linkart$unlink() {
