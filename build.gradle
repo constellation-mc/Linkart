@@ -3,6 +3,9 @@ plugins {
     id 'maven-publish'
 }
 
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
 def mc_version = project.minecraft_version
 archivesBaseName = project.archives_base_name
 version = project.mod_version
