@@ -68,7 +68,8 @@ public abstract class AbstractMinecartEntityMixin extends Entity implements Link
                 vec3d.multiply(Linkart.CONFIG.velocityMultiplier);
 
                 if (dist <= 1) {
-                    setVelocity(vec3d.multiply(dist * 0.3));
+                    // Go slower (1.0->0.8) the closer (1->0) we are
+                    setVelocity(vec3d.multiply(0.8 + 0.2*Math.abs(dist)));
                 } else {
                     if (dist <= Linkart.CONFIG.pathfindingDistance) {
                         setVelocity(vec3d);
