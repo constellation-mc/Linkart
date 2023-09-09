@@ -65,6 +65,25 @@ public abstract class AbstractMinecartEntityMixin extends Entity implements Link
                 Vec3d pos2 = linkart$getFollowing().getPos();
                 double dist = Math.abs(pos.distanceTo(pos2)) - 1.2;
                 Vec3d vec3d = pos.relativize(pos2);
+
+                // Check if we are on a sharp curve
+                Vec3d vel = getVelocity();
+                Vec3d vel2 = linkart$getFollowing().getVelocity();
+                boolean differentDirection = (
+                    vel.length() > 0.15
+                    && vel2.length() > 0.005
+                    && vel.normalize().distanceTo(vel2.normalize()) > 1.42
+                    && pos.distanceTo(pos2) > 0.5
+                );
+
+                if (differentDirection) {
+                    // Keep ourselves going at same speed if on curve
+                    dist += 1.2;
+                    vec3d = vel;
+                }
+
+                // Calculate new velocity
+                vec3d = vec3d.normalize().multiply(dist);
                 vec3d.multiply(Linkart.CONFIG.velocityMultiplier);
 
                 if (dist <= 1) {
