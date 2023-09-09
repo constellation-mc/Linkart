@@ -94,6 +94,7 @@ public abstract class AbstractMinecartEntityMixin extends Entity implements Link
 
         duck.linkart$setFollower(null);
         linkart$setFollowing(null);
+        setVelocity(0, 0, 0);
 
         ItemEntity itemEntity = new ItemEntity(getWorld(), getX(), getY(), getZ(), Items.CHAIN.getDefaultStack());
         itemEntity.setToDefaultPickupDelay();
