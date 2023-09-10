@@ -67,6 +67,26 @@ public abstract class AbstractMinecartEntityMixin extends Entity implements Link
                 Vec3d vec3d = pos.relativize(pos2);
                 vec3d = vec3d.multiply(Linkart.CONFIG.velocityMultiplier);
 
+                // Check if we are on a sharp curve
+                Vec3d vel = getVelocity();
+                Vec3d vel2 = linkart$getFollowing().getVelocity();
+                boolean differentDirection = (
+                    vel.length() > 0.15
+                    && vel2.length() > 0.005
+                    && vel.normalize().distanceTo(vel2.normalize()) > 1.42
+                    && pos.distanceTo(pos2) > 0.5
+                );
+
+                if (differentDirection) {
+                    // Keep ourselves going at same speed if on curve
+                    dist += 1.2;
+                    vec3d = vel;
+                }
+
+                // Calculate new velocity
+                vec3d = vec3d.normalize().multiply(dist);
+                vec3d.multiply(Linkart.CONFIG.velocityMultiplier);
+
                 if (dist <= 1) {
                     setVelocity(vec3d.multiply(dist * 0.3));
                 } else {
@@ -94,6 +114,7 @@ public abstract class AbstractMinecartEntityMixin extends Entity implements Link
 
         duck.linkart$setFollower(null);
         linkart$setFollowing(null);
+        setVelocity(0, 0, 0);
 
         ItemEntity itemEntity = new ItemEntity(getWorld(), getX(), getY(), getZ(), Items.CHAIN.getDefaultStack());
         itemEntity.setToDefaultPickupDelay();
